@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Project</title>
+</head>
+<body>
+    <img src="" alt="" id="rainbow" width="480">
+    
+    <div style="border: 3px solid blue">
+    <h3>Fetch API with Asynchronous programming</h3>
+    <img src="" alt="" id="rainbow2">
+    </div>
+    <script>
+        // This is the old way of working with fetch API. The chain of "then()" methods can get lengthy and that's referred to as callback hell. 
+        console.log("About to fetch a rainbow");
+        // Step 1: fetch the file
+        fetch('rainbow.jpg').then(response =>{
+            console.log(response);
+        //    Step 2: complete the stream of data in to a blob
+            // Convert the response in to an image blob. This will trigger another promise
+            return response.blob(); // if the return keyword is not used the second repsonse will say "Undefined"
+        }).then ( (blob) =>{
+            //This is the response of response.blob()
+            console.log(blob); 
+        // Step 3: change it in to format that the image Dom element accepts
+        const url = URL.createObjectURL(blob);
+        document.getElementById('rainbow').src = url;
+        }).catch( error =>{
+        // Step 4: catch the error 
+            console.log(error);
+        }
+        );
+
+        // This is callled asynchronous programming which also makes the code more readable.
+        //  Asynchronous programming allows multiple lines of code to be excuted it does not wait until a specific function in the cue completed running.
+        // The remaining function in the cue will run while the initial function is awaiting its completion or in this context "response".
+        async function getRainbow(){
+            const response = await fetch('rainbow2.jpg');
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            document.getElementById('rainbow2').src = url;
+        }
+        getRainbow().catch( 
+            (error)=>{
+                console.log(error);
+            }
+        );
+    </script> 
+</body>
+</html>
